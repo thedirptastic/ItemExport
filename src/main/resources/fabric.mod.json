@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "itemexport",
+  "version": "${version}",
+  "name": "ItemExport",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/itemexport/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.derp.itemexport.client.ItemExportClient"
+    ],
+    "main": [
+      "com.derp.itemexport.ItemExport"
+    ]
+  },
+  "mixins": [
+    "itemexport.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
