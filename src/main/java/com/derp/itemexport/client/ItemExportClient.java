@@ -1,7 +1,10 @@
 package com.derp.itemexport.client;
 
+import com.derp.itemexport.ItemExportConfig;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.systems.VertexSorter;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -27,6 +30,12 @@ import java.io.IOException;
 
 public class ItemExportClient implements ClientModInitializer {
     private static KeyBinding captureKey;
+    public static final ItemExportConfig CONFIG;
+
+    static {
+        AutoConfig.register(ItemExportConfig.class, GsonConfigSerializer::new);
+        CONFIG = AutoConfig.getConfigHolder(ItemExportConfig.class).getConfig();
+    }
 
     @Override
     public void onInitializeClient() {
@@ -53,7 +62,7 @@ public class ItemExportClient implements ClientModInitializer {
         if (!outputDir.exists()) outputDir.mkdirs();
         File outputFile = new File(outputDir, "item_" + System.currentTimeMillis() + ".png");
 
-        int size = 256;
+        int size = 16 * CONFIG.getScaleMultiplier();
         Framebuffer framebuffer = new SimpleFramebuffer(size, size, true, MinecraftClient.IS_SYSTEM_MAC);
 
         framebuffer.beginWrite(true);
@@ -61,7 +70,7 @@ public class ItemExportClient implements ClientModInitializer {
         RenderSystem.clear(GL40C.GL_COLOR_BUFFER_BIT | GL40C.GL_DEPTH_BUFFER_BIT, MinecraftClient.IS_SYSTEM_MAC);
 
         Matrix4f projectionMatrix = new Matrix4f()
-                .setOrtho(-size / 2f, size / 2f, -size / 2f, size / 2f, -1000, 1000);
+                .setOrtho(-size / 2f, size / 2f, -size / 2f, size / 2f, -62.5f * CONFIG.getScaleMultiplier(), 62.5f * CONFIG.getScaleMultiplier());
         RenderSystem.setProjectionMatrix(projectionMatrix, VertexSorter.BY_Z);
         RenderSystem.viewport(0, 0, size, size);
 

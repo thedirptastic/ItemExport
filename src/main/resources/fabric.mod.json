@@ -13,6 +13,9 @@
     "client": [
       "com.derp.itemexport.client.ItemExportClient"
     ],
+    "modmenu" : [
+      "com.derp.itemexport.ModMenuIntegration"
+    ],
     "main": [
       "com.derp.itemexport.ItemExport"
     ]
